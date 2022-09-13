@@ -1,51 +1,35 @@
+import random
 
-   from cryptography.fernet import Fernet
+top_of_range = input("Type a number: ")
 
-'''
-def write_key():
-    key = Fernet.generate_key()
-    with open("key.key", "wb") as key_file:
-        key_file.write(key)'''
+if top_of_range.isdigit():
+    top_of_range = int(top_of_range)
 
+    if top_of_range <= 0:
+        print('Please type a number larger than 0 next time.')
+        quit()
+else:
+    print('Please type a number next time.')
+    quit()
 
-def load_key():
-    file = open("key.key", "rb")
-    key = file.read()
-    file.close()
-    return key
-
-
-key = load_key()
-fer = Fernet(key)
-
-
-def view():
-    with open('passwords.txt', 'r') as f:
-        for line in f.readlines():
-            data = line.rstrip()
-            user, passw = data.split("|")
-            print("User:", user, "| Password:",
-                  fer.decrypt(passw.encode()).decode())
-
-
-def add():
-    name = input('Account Name: ')
-    pwd = input("Password: ")
-
-    with open('passwords.txt', 'a') as f:
-        f.write(name + "|" + fer.encrypt(pwd.encode()).decode() + "\n")
-
+random_number = random.randint(0, top_of_range)
+guesses = 0
 
 while True:
-    mode = input(
-        "Would you like to add a new password or view existing ones (view, add), press q to quit? ").lower()
-    if mode == "q":
-        break
-
-    if mode == "view":
-        view()
-    elif mode == "add":
-        add()
+    guesses += 1
+    user_guess = input("Make a guess: ")
+    if user_guess.isdigit():
+        user_guess = int(user_guess)
     else:
-        print("Invalid mode.")
+        print('Please type a number next time.')
         continue
+
+    if user_guess == random_number:
+        print("You got it!")
+        break
+    elif user_guess > random_number:
+        print("You were above the number!")
+    else:
+        print("You were below the number!")
+
+print("You got it in", guesses, "guesses")
